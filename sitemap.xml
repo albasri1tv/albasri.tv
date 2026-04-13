@@ -9,6 +9,15 @@
     <loc>https://albasri1tv.github.io/albasri.tv/bsr_player.html</loc>
     <priority>0.8</priority>
   </url>
+
+  <url>
+    <loc>https://albasri1tv.github.io/albasri.tv/tv.html</loc>
+    <priority>0.8</priority>
+  </url>
+
+
+
+
   
   <url>
     <loc>https://albasri1tv.github.io/albasri.tv/Basri_Pro_Player.html</loc>
