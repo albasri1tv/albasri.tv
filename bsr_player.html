@@ -3,12 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BTV PLAYER</title>
+<title>BTV PLAYER PRO</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
     :root {
         --primary-gradient: linear-gradient(135deg, #00c6ff, #0072ff);
+        --accent-gradient: linear-gradient(135deg, #11998e, #38ef7d);
         --danger-color: #ff4b4b;
         --bg-glass: rgba(255, 255, 255, 0.05);
         --border-glass: rgba(255, 255, 255, 0.1);
@@ -23,284 +24,219 @@
         min-height: 100vh;
     }
 
-    /* الحاوية الرئيسية */
-    .container {
-        max-width: 900px;
-        margin: 0 auto;
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        gap: 25px;
-    }
+    .container { max-width: 900px; margin: 0 auto; padding: 20px; display: flex; flex-direction: column; gap: 20px; }
 
-    /* الشريط العلوي */
     .top-nav {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 15px 25px;
-        background: rgba(0, 0, 0, 0.3);
-        border: 1px solid var(--border-glass);
-        border-radius: 16px;
-        backdrop-filter: blur(15px);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        display: flex; justify-content: space-between; align-items: center; padding: 15px 25px;
+        background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border-glass); border-radius: 16px; backdrop-filter: blur(15px);
     }
+    .logo { font-size: 22px; font-weight: 800; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-    .top-nav .menu-icon {
-        font-size: 24px;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-    
-    .top-nav .menu-icon:hover { color: #00c6ff; text-shadow: 0 0 10px rgba(0,198,255,0.5); }
-    .top-nav .logo { font-size: 22px; font-weight: 800; letter-spacing: 1px; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-    /* القائمة الجانبية */
-    #sideMenu {
-        position: fixed;
-        right: -280px;
-        top: 0;
-        width: 280px;
-        height: 100%;
-        background: rgba(15, 15, 25, 0.95);
-        border-left: 1px solid var(--border-glass);
-        backdrop-filter: blur(20px);
-        transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        z-index: 2000;
-        padding-top: 80px;
-        box-shadow: -10px 0 30px rgba(0,0,0,0.5);
-    }
-    
-    #sideMenu.active { right: 0; }
-    #sideMenu a { display: block; padding: 15px 25px; color: #fff; text-decoration: none; font-size: 16px; transition: 0.3s; border-bottom: 1px solid rgba(255,255,255,0.05); }
-    #sideMenu a:hover { background: rgba(255,255,255,0.1); padding-right: 35px; color: #00c6ff; }
-    .social-links { display: flex; justify-content: center; gap: 20px; margin-top: 30px; }
-    .social-links a { border: none !important; padding: 0 !important; font-size: 24px; }
-
-    /* البطاقات */
     .card {
-        background: var(--bg-glass);
-        border: 1px solid var(--border-glass);
-        border-radius: 20px;
-        padding: 30px;
-        backdrop-filter: blur(15px);
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-        transition: transform 0.3s;
+        background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 20px; padding: 25px;
+        backdrop-filter: blur(15px); box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
     }
-    .card:hover { border-color: rgba(255,255,255,0.2); }
-    .card h2 { text-align: center; margin-top: 0; margin-bottom: 25px; font-weight: 800; text-shadow: 0 2px 5px rgba(0,0,0,0.5); }
 
-    /* المدخلات */
-    .input-group { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
-    .input-group label { font-weight: 600; font-size: 15px; color: #ccc; }
-    
-    input, select, textarea {
-        width: 100%;
-        font-family: 'Cairo', sans-serif;
-        font-size: 15px;
-        padding: 14px;
-        border: 1px solid rgba(255,255,255,0.1);
-        border-radius: 12px;
-        background: rgba(0, 0, 0, 0.2);
-        color: #fff;
-        transition: 0.3s;
-        box-sizing: border-box;
-    }
-    
-    input:focus, select:focus, textarea:focus {
-        border-color: #00c6ff;
-        background: rgba(0, 0, 0, 0.4);
-        box-shadow: 0 0 15px rgba(0, 198, 255, 0.2);
-        outline: none;
-    }
-    
-    select option { background: #1a2a32; color: #fff; }
-
-    /* الأزرار */
-    .btn-primary {
-        padding: 14px;
-        border: none;
-        border-radius: 12px;
-        background: var(--primary-gradient);
-        color: #fff;
-        font-size: 16px;
-        font-weight: bold;
-        font-family: 'Cairo', sans-serif;
-        cursor: pointer;
-        transition: 0.3s;
-        box-shadow: 0 4px 15px rgba(0, 114, 255, 0.3);
-        text-shadow: 0 1px 2px rgba(0,0,0,0.2);
-    }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0, 114, 255, 0.5); }
-    .btn-primary:active { transform: translateY(0); }
-    
-    .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
-
-    /* سيرفرات القنوات (البلوكات) */
-    .server-block {
-        background: rgba(0, 0, 0, 0.25);
-        border: 1px solid rgba(255,255,255,0.08);
-        padding: 20px;
-        border-radius: 16px;
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        transition: 0.3s;
-        position: relative;
-        overflow: hidden;
-    }
-    .server-block:hover { border-color: rgba(0,198,255,0.3); box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
-    .server-block::before { content:''; position:absolute; top:0; right:0; width:4px; height:100%; background:var(--primary-gradient); }
-    
-    .server-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px; }
-    .server-header h3 { margin: 0; font-size: 18px; color: #00c6ff; }
-    
-    .delete-btn {
-        background: rgba(255, 75, 75, 0.1); color: var(--danger-color); border: 1px solid rgba(255, 75, 75, 0.2);
-        width: 35px; height: 35px; border-radius: 8px; cursor: pointer; transition: 0.3s;
-        display: flex; justify-content: center; align-items: center;
-    }
-    .delete-btn:hover { background: var(--danger-color); color: #fff; box-shadow: 0 0 15px rgba(255, 75, 75, 0.4); }
+    h2 { text-align: center; margin-bottom: 20px; font-size: 20px; color: #00c6ff; }
 
     .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-        .input-grid { grid-template-columns: 1fr; }
-        .btn-group { grid-template-columns: 1fr; }
-        .card { padding: 20px; }
+    input, select, textarea {
+        width: 100%; font-family: 'Cairo', sans-serif; padding: 12px; border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 10px; background: rgba(0, 0, 0, 0.3); color: #fff; box-sizing: border-box;
     }
+    input:focus { border-color: #00c6ff; outline: none; background: rgba(0,0,0,0.5); }
+
+    .btn {
+        padding: 12px 20px; border: none; border-radius: 10px; color: #fff; font-weight: bold;
+        cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn-add { background: var(--primary-gradient); width: 100%; margin-top: 15px; }
+    .btn-update { background: var(--accent-gradient); }
+
+    /* قائمة السيرفرات المضافة */
+    #serverList { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
+    .server-item {
+        background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 12px 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center;
+        transition: 0.3s;
+    }
+    .server-item:hover { background: rgba(255, 255, 255, 0.12); transform: translateX(-5px); }
+    .server-info { display: flex; flex-direction: column; gap: 2px; }
+    .server-info span { font-size: 14px; font-weight: 800; color: #00c6ff; }
+    .server-info small { font-size: 11px; color: #aaa; max-width: 250px; overflow: hidden; text-overflow: ellipsis; }
+
+    .actions { display: flex; gap: 10px; }
+    .action-btn {
+        width: 35px; height: 35px; border-radius: 8px; border: none; cursor: pointer;
+        display: flex; align-items: center; justify-content: center; transition: 0.3s; color: #fff;
+    }
+    .edit-btn { background: rgba(255, 193, 7, 0.2); color: #ffc107; }
+    .edit-btn:hover { background: #ffc107; color: #000; }
+    .del-btn { background: rgba(255, 75, 75, 0.2); color: #ff4b4b; }
+    .del-btn:hover { background: #ff4b4b; color: #fff; }
+
+    @media (max-width: 600px) { .input-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
 
 <div class="container">
     <div class="top-nav">
-        <div class="logo"><i class="fas fa-play-circle"></i> BTV PLAYER</div>
-        <div class="menu-icon" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
+        <div class="logo">BTV PLAYER PRO</div>
+        <div style="font-size: 20px;"><i class="fas fa-code-branch"></i></div>
     </div>
 
-    <div id="sideMenu">
-        <a href="https://play.google.com/store/apps/details?id=com.btv.video.player&hl=ar"><i class="fab fa-google-play"></i> تحميل المشغل</a>
-        <a href="#"><i class="fas fa-code"></i> توليد JSON</a>
-        <a href="#"><i class="fas fa-play"></i> Play Button</a>
-        <div class="social-links">
-            <a href="https://t.me/lbsplayer" target="_blank"><i class="fab fa-telegram"></i></a>
-            <a href="https://www.instagram.com/a_l__i19/" target="_blank"><i class="fab fa-instagram"></i></a>
+    <div class="card">
+        <h2><i class="fas fa-unlock-alt"></i> استيراد كود</h2>
+        <div style="display:flex; gap:10px;">
+            <input type="text" id="encodedInput" placeholder="الصق الكود هنا لفك السيرفرات...">
+            <button onclick="decodeAndFill()" class="btn btn-update" style="white-space:nowrap;">فك الضغط</button>
         </div>
     </div>
 
     <div class="card">
-        <h2><i class="fas fa-cogs"></i> لوحة التحكم والتوليد</h2>
+        <h2 id="formTitle"><i class="fas fa-plus-circle"></i> إضافة سيرفر جديد</h2>
+        <input type="hidden" id="editIndex" value="-1">
+        <div class="input-grid">
+            <input type="text" id="name_server" placeholder="اسم السيرفر (مثال: سيرفر 1)">
+            <input type="text" id="url_channel" placeholder="رابط القناة (URL)" style="direction:ltr;">
+            <input type="text" id="userAgent" placeholder="User Agent">
+            <input type="text" id="referer" placeholder="Referer" style="direction:ltr;">
+            <input type="text" id="drm_key" placeholder="Clearkey (DRM)" style="direction:ltr;">
+            <input type="text" id="origin" placeholder="Origin" style="direction:ltr;">
+            <select id="type_player" style="grid-column: 1 / -1;">
+                <option value="bsr_player_exo">EXO Player (أندرويد)</option>
+                <option value="bsr_player_web">WEB Player (متصفح)</option>
+                <option value="bsr_player_m3u">M3U Playlist</option>
+            </select>
+        </div>
+        <button onclick="saveServer()" id="mainBtn" class="btn btn-add">
+            <i class="fas fa-save"></i> إضافة السيرفر للقائمة
+        </button>
+    </div>
 
-        <div class="input-group">
-            <label>أدخل كود JSON المشفر:</label>
-            <div style="display:flex; gap:10px;">
-                <input type="text" id="encodedInput" placeholder="الصق الكود المشفر هنا لفكه...">
-                <button onclick="decodeAndFill()" class="btn-primary" style="white-space:nowrap;"><i class="fas fa-unlock-alt"></i> فك التشفير</button>
+    <div class="card">
+        <h2><i class="fas fa-list-ul"></i> السيرفرات المضافة</h2>
+        <div id="serverList">
             </div>
-        </div>
-
-        <div id="jsonContainer" style="display:flex; flex-direction:column; gap:20px;"></div>
-
-        <div class="btn-group">
-            <button onclick="addBlock()" class="btn-primary"><i class="fas fa-plus-circle"></i> إضافة قناة / سيرفر</button>
-            <button onclick="updateJson()" class="btn-primary" style="background: linear-gradient(135deg, #11998e, #38ef7d);"><i class="fas fa-sync-alt"></i> تحديث الكود</button>
-        </div>
-
-        <hr style="border:0; height:1px; background:var(--border-glass); margin:30px 0;">
-
-        <div class="input-group">
-            <label><i class="fas fa-link"></i> رابط Intent النهائي:</label>
-            <textarea id="intentCode" rows="3" readonly style="direction:ltr; text-align:left;"></textarea>
-            <button onclick="copyIntentCode()" class="btn-primary"><i class="fas fa-copy"></i> نسخ كود Intent</button>
-        </div>
     </div>
 
     <div class="card">
-        <h2><i class="fas fa-code"></i> كود زر التشغيل للموقع (Play Button)</h2>
-        <div class="input-group">
-            <textarea id="playCode" rows="10" readonly style="direction:ltr; text-align:left; font-family:monospace;"></textarea>
-            <button onclick="copyPlayCode()" class="btn-primary"><i class="fas fa-copy"></i> نسخ كود HTML</button>
+        <h2><i class="fas fa-terminal"></i> الأكواد الناتجة</h2>
+        <div style="display:flex; flex-direction:column; gap:15px;">
+            <div>
+                <label style="font-size:12px; color:#aaa;">رابط Intent المباشر:</label>
+                <textarea id="intentCode" rows="2" readonly style="font-size:12px; direction:ltr;"></textarea>
+                <button onclick="copyToClipboard('intentCode')" class="btn btn-add" style="margin-top:5px; padding:8px;"><i class="fas fa-copy"></i> نسخ</button>
+            </div>
+            <div>
+                <label style="font-size:12px; color:#aaa;">كود HTML لزر التشغيل:</label>
+                <textarea id="playCode" rows="4" readonly style="font-size:11px; direction:ltr;"></textarea>
+                <button onclick="copyToClipboard('playCode')" class="btn btn-add" style="margin-top:5px; padding:8px;"><i class="fas fa-copy"></i> نسخ كود الزر</button>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
-let counter = 0;
+let servers = [];
 
-function toggleMenu() {
-    const menu = document.getElementById('sideMenu');
-    menu.classList.toggle('active');
-}
+function saveServer() {
+    const name = document.getElementById('name_server').value;
+    const url = document.getElementById('url_channel').value;
+    const index = parseInt(document.getElementById('editIndex').value);
 
-// إخفاء القائمة عند الضغط خارجها
-document.addEventListener('click', function(event) {
-    const menu = document.getElementById('sideMenu');
-    const button = document.querySelector('.fa-bars');
-    if (!menu.contains(event.target) && !button.contains(event.target)) {
-        menu.classList.remove('active');
+    if(!name || !url) { alert("يرجى ملء الاسم والرابط على الأقل!"); return; }
+
+    const serverData = {
+        name_server: name,
+        url_channel: url,
+        userAgent: document.getElementById('userAgent').value,
+        referer: document.getElementById('referer').value,
+        drm_key: document.getElementById('drm_key').value,
+        origin: document.getElementById('origin').value,
+        type_player: document.getElementById('type_player').value
+    };
+
+    if(index === -1) {
+        servers.push(serverData);
+    } else {
+        servers[index] = serverData;
+        document.getElementById('editIndex').value = "-1";
+        document.getElementById('mainBtn').innerHTML = '<i class="fas fa-save"></i> إضافة السيرفر للقائمة';
+        document.getElementById('formTitle').innerHTML = '<i class="fas fa-plus-circle"></i> إضافة سيرفر جديد';
     }
-});
 
-function addBlock() {
-    counter++;
-    const container = document.createElement('div');
-    container.className = 'server-block';
-    container.id = `block${counter}`;
-    container.innerHTML = `
-        <div class="server-header">
-            <h3><i class="fas fa-server"></i> سيرفر ${counter}</h3>
-            <button onclick="deleteBlock(${counter})" class="delete-btn" title="حذف"><i class="fas fa-trash"></i></button>
-        </div>
-        <div class="input-grid">
-            <input type="text" id="name_server${counter}" placeholder="اسم السيرفر" oninput="updateJson()">
-            <input type="text" id="url_channel${counter}" placeholder="الرابط (URL)" oninput="updateJson()" style="direction:ltr;">
-            <input type="text" id="userAgent${counter}" placeholder="User Agent" oninput="updateJson()">
-            <input type="text" id="referer${counter}" placeholder="Referer" oninput="updateJson()" style="direction:ltr;">
-            <input type="text" id="drm_key${counter}" placeholder="Clearkey (DRM)" oninput="updateJson()" style="direction:ltr;">
-            <input type="text" id="origin${counter}" placeholder="Origin" oninput="updateJson()" style="direction:ltr;">
-            <select id="type_player${counter}" onchange="updateJson()" style="grid-column: 1 / -1;">
-                <option value="bsr_player_exo">EXO Player</option>
-                <option value="bsr_player_web">WEB Player</option>
-                <option value="bsr_player_m3u">M3U Playlist</option>
-            </select>
-        </div>
-    `;
-    document.getElementById('jsonContainer').appendChild(container);
-    updateJson();
+    clearInputs();
+    renderServers();
+    generateCodes();
 }
 
-function deleteBlock(id) {
-    document.getElementById(`block${id}`).remove();
-    updateJson();
-}
-
-function updateJson() {
-    const blocks = document.querySelectorAll('#jsonContainer > div[id^="block"]');
-    const jsonData = [];
-    let prefix = 'bsr_player_exo';
+function renderServers() {
+    const list = document.getElementById('serverList');
+    list.innerHTML = servers.length === 0 ? '<div style="text-align:center; color:#666; font-size:14px;">لا توجد سيرفرات مضافة حالياً</div>' : '';
     
-    blocks.forEach(block => {
-        const inputs = block.querySelectorAll('input,select');
-        jsonData.push({
-            name_server: inputs[0].value,
-            url_channel: inputs[1].value,
-            userAgent: inputs[2].value,
-            referer: inputs[3].value,
-            drm_key: inputs[4].value,
-            origin: inputs[5].value,
-            type_player: inputs[6].value
-        });
-        prefix = inputs[6].value || 'bsr_player_exo';
+    servers.forEach((s, i) => {
+        list.innerHTML += `
+            <div class="server-item">
+                <div class="server-info">
+                    <span>${s.name_server}</span>
+                    <small>${s.url_channel}</small>
+                </div>
+                <div class="actions">
+                    <button onclick="editServer(${i})" class="action-btn edit-btn"><i class="fas fa-pen"></i></button>
+                    <button onclick="deleteServer(${i})" class="action-btn del-btn"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>
+        `;
     });
+}
+
+function editServer(i) {
+    const s = servers[i];
+    document.getElementById('name_server').value = s.name_server;
+    document.getElementById('url_channel').value = s.url_channel;
+    document.getElementById('userAgent').value = s.userAgent;
+    document.getElementById('referer').value = s.referer;
+    document.getElementById('drm_key').value = s.drm_key;
+    document.getElementById('origin').value = s.origin;
+    document.getElementById('type_player').value = s.type_player;
     
-    const jsonString = JSON.stringify(jsonData);
-    const encoded = btoa(unescape(encodeURIComponent(jsonString))); 
-    const finalEncodedCode = prefix + encoded;
+    document.getElementById('editIndex').value = i;
+    document.getElementById('mainBtn').innerHTML = '<i class="fas fa-check-circle"></i> حفظ التعديلات';
+    document.getElementById('formTitle').innerHTML = '<i class="fas fa-edit"></i> تعديل السيرفر الآن';
+    window.scrollTo({ top: 200, behavior: 'smooth' });
+}
+
+function deleteServer(i) {
+    servers.splice(i, 1);
+    renderServers();
+    generateCodes();
+}
+
+function clearInputs() {
+    ['name_server', 'url_channel', 'userAgent', 'referer', 'drm_key', 'origin'].forEach(id => {
+        document.getElementById(id).value = '';
+    });
+    document.getElementById('type_player').value = 'bsr_player_exo';
+}
+
+function generateCodes() {
+    if(servers.length === 0) {
+        document.getElementById('intentCode').value = '';
+        document.getElementById('playCode').value = '';
+        return;
+    }
+
+    const prefix = servers[0].type_player;
+    const jsonString = JSON.stringify(servers);
+    const encoded = btoa(unescape(encodeURIComponent(jsonString)));
+    const finalCode = prefix + encoded;
     
-    document.getElementById('intentCode').value = `intent://${finalEncodedCode}#Intent;scheme=xmtv;package=com.btv.video.player;end`;
-    document.getElementById('playCode').value = `<!DOCTYPE html>
+    const intent = `intent://${finalCode}#Intent;scheme=xmtv;package=com.btv.video.player;end`;
+    document.getElementById('intentCode').value = intent;
+    
+    document.getElementById('playCode').value = `<a href="${intent}" style="display:inline-block; padding:15px 30px; background:linear-gradient(135deg,#ff512f,#dd2476); color:#fff; border-radius:50px; text-decoration:none; font-family:sans-serif; font-weight:bold; box-shadow:0 10px 20px rgba(221,36,118,0.3);">PLAY NOW</a><!DOCTYPE html>
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
@@ -323,54 +259,28 @@ body { margin:0;height:100vh;display:flex;justify-content:center;align-items:cen
 
 function decodeAndFill() {
     const input = document.getElementById('encodedInput').value;
-    const prefixList = ['com.btv.video.player', 'bsr_player_web', 'bsr_player_m3u', 'bsr_player_exo'];
-    const prefix = prefixList.find(p => input.startsWith(p));
+    const prefixes = ['bsr_player_web', 'bsr_player_m3u', 'bsr_player_exo', 'com.btv.video.player'];
+    const prefix = prefixes.find(p => input.startsWith(p));
     
-    if (!prefix) {
-        alert("يرجى إدخال كود صحيح.");
-        return;
-    }
+    if(!prefix) { alert("الكود غير صحيح!"); return; }
     
-    const base64String = input.replace(prefix, '');
     try {
-        const jsonData = JSON.parse(decodeURIComponent(escape(atob(base64String))));
-        document.getElementById('jsonContainer').innerHTML = '';
-        counter = 0;
-        jsonData.forEach((data, index) => {
-            addBlock();
-            const inputs = document.querySelectorAll(`#block${index + 1} input, #block${index + 1} select`);
-            inputs[0].value = data.name_server || '';
-            inputs[1].value = data.url_channel || '';
-            inputs[2].value = data.userAgent || '';
-            inputs[3].value = data.referer || '';
-            inputs[4].value = data.drm_key || '';
-            inputs[5].value = data.origin || '';
-            inputs[6].value = data.type_player || 'bsr_player_exo';
-        });
-        updateJson();
+        const base64 = input.replace(prefix, '');
+        servers = JSON.parse(decodeURIComponent(escape(atob(base64))));
+        renderServers();
+        generateCodes();
+        alert("تم استيراد " + servers.length + " سيرفر بنجاح!");
     } catch(e) {
-        alert("خطأ في فك الترميز.");
+        alert("خطأ في فك التشفير!");
     }
 }
 
-function copyIntentCode() {
-    const t = document.getElementById('intentCode');
-    t.select();
-    document.execCommand('copy');
-    alert("تم نسخ كود Intent بنجاح!");
+function copyToClipboard(id) {
+    const copyText = document.getElementById(id);
+    copyText.select();
+    document.execCommand("copy");
+    alert("تم النسخ!");
 }
-
-function copyPlayCode() {
-    const t = document.getElementById('playCode');
-    t.select();
-    document.execCommand('copy');
-    alert("تم نسخ كود زر التشغيل بنجاح!");
-}
-
-// إضافة بلوك افتراضي عند فتح الصفحة
-window.onload = () => {
-    addBlock();
-};
 </script>
 </body>
 </html>
