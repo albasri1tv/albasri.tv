@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BTV PLAYER</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+body {
+    margin:0;
+    font-family:'Cairo',sans-serif;
+    background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+    color:#fff;
+}
+
+/* القوائم */
+#sideMenu {
+    position:fixed;
+    right:-260px;
+    top:0;
+    width:260px;
+    height:100%;
+    background:rgba(15,15,25,.98);
+    backdrop-filter:blur(10px);
+    transition:.4s;
+    z-index:2000;
+    padding-top:70px;
+    border-radius:0 0 0 12px;
+}
+#sideMenu.active { right:0; }
+#sideMenu a { display:block; padding:12px 20px; color:#fff; text-decoration:none; font-size:16px; }
+#sideMenu a:hover { background: rgba(255,255,255,0.1); }
+
+/* البطاقات */
+.card {
+    background:rgba(255,255,255,.08);
+    border-radius:15px;
+    padding:20px;
+    backdrop-filter:blur(10px);
+    box-shadow:0 0 25px rgba(0,0,0,.4);
+    width:100%;
+    max-width:100%;
+    box-sizing:border-box;
+}
+
+/* مدخلات النصوص */
+input, select, textarea {
+    width:100%;
+    max-width:100%;
+    font-size:16px;
+    padding:10px;
+    border:none;
+    border-radius:8px;
+    box-sizing:border-box;
+    background:rgba(0,0,0,.2);
+    color:#fff;
+}
+
+/* زر التشغيل */
+.play-btn {
+    width:150px;
+    height:150px;
+    border-radius:50%;
+    border:none;
+    cursor:pointer;
+    background:linear-gradient(135deg,#ff512f,#dd2476);
+    box-shadow:0 0 30px rgba(255,81,47,0.6),0 0 60px rgba(221,36,118,0.5),0 0 90px rgba(255,81,47,0.4);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    transition:transform 0.3s ease,box-shadow 0.3s ease;
+    position:relative;
+    overflow:hidden;
+    animation:pulse 2s infinite;
+}
+.play-btn::before {
+    content:'';
+    display:block;
+    width:0;
+    height:0;
+    border-left:35px solid #fff;
+    border-top:20px solid transparent;
+    border-bottom:20px solid transparent;
+}
+@keyframes pulse {
+    0% { box-shadow:0 0 30px rgba(255,81,47,0.6),0 0 60px rgba(221,36,118,0.5),0 0 90px rgba(255,81,47,0.4); }
+    50% { box-shadow:0 0 45px rgba(255,81,47,0.8),0 0 80px rgba(221,36,118,0.7),0 0 120px rgba(255,81,47,0.6); }
+    100% { box-shadow:0 0 30px rgba(255,81,47,0.6),0 0 60px rgba(221,36,118,0.5),0 0 90px rgba(255,81,47,0.4); }
+}
+.play-btn:hover {
+    transform:scale(1.15);
+    box-shadow:0 0 60px rgba(255,81,47,0.9),0 0 100px rgba(221,36,118,0.8),0 0 140px rgba(255,81,47,0.7);
+}
+
+/* Responsive */
+@media (max-width:480px){
+    .play-btn { width:180px; height:180px; }
+    input, select, textarea { font-size:14px; padding:8px; }
+    #sideMenu { width:200px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Top Nav -->
+<div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:rgba(0,0,0,.5);border-radius:12px;backdrop-filter:blur(10px);margin-bottom:20px;">
+  <div style="font-size:20px;cursor:pointer;" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
+  <div style="font-size:18px;font-weight:bold;">BTV PLAYER</div>
+  <div></div>
+</div>
+
+<!-- Side Menu -->
+<div id="sideMenu">
+  <a href="https://play.google.com/store/apps/details?id=com.btv.video.player&hl=ar">تحميل المشغل </a>
+  <a href="#">توليد JSON</a>
+  <a href="#">Play Button</a>
+  <div style="display:flex;justify-content:center;gap:15px;margin-top:20px;">
+    <a href="https://t.me/lbsplayer" target="_blank"><i class="fab fa-telegram"></i></a>
+    <a href="https://www.instagram.com/a_l__i19/" target="_blank"><i class="fab fa-instagram"></i></a>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div style="display:flex;flex-direction:column;gap:20px;">
+
+  <!-- JSON Generator Card -->
+  <div class="card">
+    <h2 style="text-align:center;margin-bottom:20px;">BTV PLAYER </h2>
+
+    <!-- Input -->
+    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:15px;">
+      <label style="font-weight:bold;">أدخل كود JSON المشفر:</label>
+      <input type="text" id="encodedInput" placeholder="أدخل الكود المشفر هنا">
+      <button onclick="decodeAndFill()" style="padding:12px;border:none;border-radius:12px;background:linear-gradient(135deg,#00c6ff,#0072ff);color:#fff;font-size:16px;cursor:pointer;">فك التشفير</button>
+    </div>
+
+    <!-- Blocks -->
+    <div id="jsonContainer" style="display:flex;flex-direction:column;gap:15px;"></div>
+
+    <!-- Add / Update Buttons -->
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:15px;">
+      <button onclick="addBlock()" style="padding:12px;border:none;border-radius:12px;background:linear-gradient(135deg,#00c6ff,#0072ff);color:#fff;font-size:16px;cursor:pointer;">إضافة قناة</button>
+      <button onclick="updateJson()" style="padding:12px;border:none;border-radius:12px;background:linear-gradient(135deg,#00c6ff,#0072ff);color:#fff;font-size:16px;cursor:pointer;">تحديث الكود</button>
+    </div>
+
+    <!-- Intent Code -->
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:15px;">
+      <label style="font-weight:bold;">كود intent:</label>
+      <textarea id="intentCode" rows="2" readonly></textarea>
+      <button onclick="copyIntentCode()" style="padding:12px;border:none;border-radius:12px;background:linear-gradient(135deg,#00c6ff,#0072ff);color:#fff;font-size:16px;cursor:pointer;">نسخ كود intent</button>
+    </div>
+  </div>
+
+  <!-- Play Button Card -->
+  <div class="card">
+    <h2 style="text-align:center;margin-bottom:20px;">كود Play Button</h2>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <textarea id="playCode" rows="16" readonly></textarea>
+      <button onclick="copyPlayCode()" style="padding:12px;border:none;border-radius:12px;background:linear-gradient(135deg,#00c6ff,#0072ff);color:#fff;font-size:16px;cursor:pointer;">نسخ كود Play Button</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+let counter=0;
+function toggleMenu(){
+  const menu=document.getElementById('sideMenu');
+  menu.classList.toggle('active');
+}
+
+// إخفاء القائمة عند الضغط خارجها
+document.addEventListener('click', function(event){
+  const menu = document.getElementById('sideMenu');
+  const button = document.querySelector('.fa-bars');
+  if(!menu.contains(event.target) && !button.contains(event.target)){
+    menu.classList.remove('active');
+  }
+});
+
+function addBlock(){
+  counter++;
+  const container=document.createElement('div');
+  container.style.background='rgba(0,0,0,.2)';
+  container.style.padding='12px';
+  container.style.borderRadius='12px';
+  container.style.display='flex';
+  container.style.flexDirection='column';
+  container.style.gap='10px';
+  container.id=`block${counter}`;
+  container.innerHTML=`
+    <h3>Server ${counter}</h3>
+    <input type="text" id="name_server${counter}" placeholder="اسم السيرفر" oninput="updateJson()">
+    <input type="text" id="url_channel${counter}" placeholder="الرابط" oninput="updateJson()">
+    <input type="text" id="userAgent${counter}" placeholder="User Agent" oninput="updateJson()">
+    <input type="text" id="referer${counter}" placeholder="Referer" oninput="updateJson()">
+    <input type="text" id="drm_key${counter}" placeholder="Clearkey" oninput="updateJson()">
+    <input type="text" id="origin${counter}" placeholder="Origin" oninput="updateJson()">
+    <select id="type_player${counter}" onchange="updateJson()">
+      <option value="bsr_player_exo">EXO</option>
+      <option value="bsr_player_web">WEB</option>
+      <option value="bsr_player_m3u">M3U</option>
+    </select>
+    <button onclick="deleteBlock(${counter})" style="padding:12px;border:none;border-radius:12px;background:red;color:#fff;cursor:pointer;margin-top:10px;">حذف</button>
+  `;
+  document.getElementById('jsonContainer').appendChild(container);
+  updateJson();
+}
+function deleteBlock(id){document.getElementById(`block${id}`).remove();updateJson();}
+function updateJson(){
+  const blocks=document.querySelectorAll('#jsonContainer > div[id^="block"]');
+  const jsonData=[];
+  let prefix='bsr_player_exo';
+  blocks.forEach(block=>{
+    const inputs=block.querySelectorAll('input,select');
+    jsonData.push({
+      name_server:inputs[0].value,
+      url_channel:inputs[1].value,
+      userAgent:inputs[2].value,
+      referer:inputs[3].value,
+      drm_key:inputs[4].value,
+      origin:inputs[5].value,
+      type_player:inputs[6].value
+    });
+    prefix = inputs[6].value || 'bsr_player_exo';
+  });
+  const jsonString=JSON.stringify(jsonData);
+  const encoded=btoa(jsonString);
+  const finalEncodedCode=prefix+encoded;
+  document.getElementById('intentCode').value=`intent://${finalEncodedCode}#Intent;scheme=xmtv;package=com.btv.video.player;end`;
+  document.getElementById('playCode').value=`<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Live TV</title>
+<style>
+body { margin:0;height:100vh;display:flex;justify-content:center;align-items:center;background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);font-family:'Cairo',sans-serif;}
+.play-btn { width:150px; height:150px; border-radius:50%; border:none; cursor:pointer; background:linear-gradient(135deg,#ff512f,#dd2476); box-shadow:0 0 30px rgba(255,81,47,0.6),0 0 60px rgba(221,36,118,0.5),0 0 90px rgba(255,81,47,0.4); display:flex; justify-content:center; align-items:center; transition:transform 0.3s ease,box-shadow 0.3s ease; position:relative; overflow:hidden; animation:pulse 2s infinite;}
+.play-btn::before { content:''; display:block; width:0; height:0; border-left:35px solid #fff; border-top:20px solid transparent; border-bottom:20px solid transparent;}
+@keyframes pulse {0%{box-shadow:0 0 30px rgba(255,81,47,0.6),0 0 60px rgba(221,36,118,0.5),0 0 90px rgba(255,81,47,0.4);}50%{box-shadow:0 0 45px rgba(255,81,47,0.8),0 0 80px rgba(221,36,118,0.7),0 0 120px rgba(255,81,47,0.6);}100%{box-shadow:0 0 30px rgba(255,81,47,0.6),0 0 60px rgba(221,36,118,0.5),0 0 90px rgba(255,81,47,0.4);}}
+.play-btn:hover { transform:scale(1.15); box-shadow:0 0 60px rgba(255,81,47,0.9),0 0 100px rgba(221,36,118,0.8),0 0 140px rgba(255,81,47,0.7);}
+@media (max-width:480px){.play-btn { width:180px; height:180px; }}
+</style>
+</head>
+<body>
+<button class="play-btn" onclick="window.location.replace('intent://${finalEncodedCode}#Intent;scheme=xmtv;package=com.btv.video.player;end')"></button>
+</body>
+</html>`;
+}
+function decodeAndFill(){
+  const input=document.getElementById('encodedInput').value;
+  const prefixList=['com.btv.video.player','bsr_player_web','bsr_player_m3u','bsr_player_exo'];
+  const prefix=prefixList.find(p=>input.startsWith(p));
+  if(!prefix){alert("يرجى إدخال كود صحيح.");return;}
+  const base64String=input.replace(prefix,'');
+  try{
+    const jsonData=JSON.parse(atob(base64String));
+    document.getElementById('jsonContainer').innerHTML='';
+    counter=0;
+    jsonData.forEach((data,index)=>{
+      addBlock();
+      const inputs=document.querySelectorAll(`#block${index+1} input, #block${index+1} select`);
+      inputs[0].value=data.name_server;
+      inputs[1].value=data.url_channel;
+      inputs[2].value=data.userAgent;
+      inputs[3].value=data.referer;
+      inputs[4].value=data.drm_key;
+      inputs[5].value=data.origin;
+      inputs[6].value=data.type_player||'bsr_player_exo';
+    });
+    updateJson();
+  }catch(e){alert("خطأ في فك الترميز.");}
+}
+function copyIntentCode(){const t=document.getElementById('intentCode');t.select();document.execCommand('copy');alert("تم نسخ كود intent!");}
+function copyPlayCode(){const t=document.getElementById('playCode');t.select();document.execCommand('copy');alert("تم نسخ كود Play Button!");}
+</script>
+
+</body>
+</html>
